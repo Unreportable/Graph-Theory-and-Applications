@@ -3,8 +3,8 @@ import svgwrite
 from lxml import etree
 import matplotlib.pyplot as plt
 import networkx as nx
-c=0
-d =0
+c = 0
+d = 0
 MIN_LATITUDE = 0
 MIN_LONGITUDE = 0
 MAX_LATITUDE = 0
