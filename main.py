@@ -3,8 +3,8 @@ import svgwrite
 from lxml import etree
 import matplotlib.pyplot as plt
 import networkx as nx
-c = 0
-d = 0
+c=0
+d =0
 MIN_LATITUDE = 0
 MIN_LONGITUDE = 0
 MAX_LATITUDE = 0
@@ -83,7 +83,7 @@ def parsing(filename):
     return adjacency_list, coordinates
 
    
-def Tasks(adj_list,coordinates,filename1,filename2,filename3):
+def Tasks(adj_list,filename1,filename2):
     #список смежности
     with open(filename1 + ".csv", 'w') as file:
         csv.writer(file).writerows(adj_list.items())
@@ -101,38 +101,7 @@ def Tasks(adj_list,coordinates,filename1,filename2,filename3):
                     matrix_row.append(0)
             output.writerow([first_vertex] + list(matrix_row))
 
-    #рисуем
-    global MAX_LATITUDE, MIN_LONGITUDE, MIN_LATITUDE, MAX_LONGITUDE, SCALE
 
-    scale_latitude = (MAX_LATITUDE - MIN_LATITUDE) / SCALE
-    scale_longitude = (MAX_LONGITUDE - MIN_LONGITUDE) / SCALE
-    result_graph = svgwrite.Drawing(
-        filename3 + ".svg", size=(str(SCALE) + 'px', str(SCALE) + 'px'))
-
-    for first_point in adj_list:
-        result_graph.add(result_graph.circle(
-            (SCALE - (MAX_LONGITUDE - coordinates[first_point][1])
-             / scale_longitude,
-             (MAX_LATITUDE - coordinates[first_point][0])
-             / scale_latitude), 2))
-        for second_point in adj_list[first_point]:
-            result_graph.add(result_graph.circle(
-                (SCALE - (MAX_LONGITUDE - coordinates[second_point][1])
-                 / scale_longitude,
-                 (MAX_LATITUDE - coordinates[second_point][0])
-                 / scale_latitude), 2))
-            result_graph.add(result_graph.line(
-                (SCALE - (MAX_LONGITUDE - coordinates[first_point][1])
-                 / scale_longitude,
-                 (MAX_LATITUDE - coordinates[first_point][0])
-                 / scale_latitude),
-                (SCALE - (MAX_LONGITUDE - coordinates[second_point][1])
-                 / scale_longitude,
-                 (MAX_LATITUDE - coordinates[second_point][0])
-                 / scale_latitude),
-                stroke=svgwrite.rgb(0, 0, 0, "%")))
-
-    result_graph.save()
 
 
 
@@ -156,19 +125,15 @@ def plotGraphDDD(adjaa_list, locs):
 
 def plotGraph(filename, locs):
     G = nx.read_adjlist(filename) 
-    #nx.draw_networkx(G, pos=locs, node_size = 0, width = 2, with_labels = False) 
     nx.draw(G, pos=locs, node_size = 0, width = 0.05) 
     plt.axis('off') 
-    plt.savefig("graphPng.svg", dpi=3000, figsize=(10,15)) 
-  #plt.savefig('graphdorog.svg',dpi = 200)
-   # plt.savefig('graphVec12.svg')
+    plt.savefig("graphSvg.svg", dpi=3000, figsize=(10,15)) 
+   # plt.savefig('graphPdf.pdf')
 
 
 adja_list, coord = parsing(input())
-##Tasks(adja_list,coord,"adj_list","adj_matrix","picture")
-
+Tasks(adja_list,"adj_list","adj_matrix")
 plotGraphDDD(adja_list,coord)
-
 plotGraph("test.txt",coord)
 print(c)
 print(d)
